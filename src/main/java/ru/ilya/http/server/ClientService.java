@@ -1,4 +1,4 @@
-package HTTPServer;
+package ru.ilya.http.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ClientResponce {
+public class ClientService {
     private final Socket socket;
     private Path filePath;
     private String requestPath;
 
-    public ClientResponce(Socket socket, String requestPath){
+    public ClientService(Socket socket, String requestPath){
         this.requestPath = requestPath;
         this.socket = socket;
     }
@@ -33,10 +33,10 @@ public class ClientResponce {
             output.println("Content-Type: text/html; charset=utf-8");
             output.println();
 
-            BufferedReader inputFie = new BufferedReader(Files.newBufferedReader(Path.of(filePath.toUri())));
+            BufferedReader inputFile = new BufferedReader(Files.newBufferedReader(Path.of(filePath.toUri())));
 
-            while (inputFie.ready()) {
-                output.println(inputFie.readLine());
+            while (inputFile.ready()) {
+                output.println(inputFile.readLine());
             }
             output.flush();
         }
@@ -47,6 +47,7 @@ public class ClientResponce {
             socket.close();
         }
     }
+
     private Path getFileName(String filePath) throws URISyntaxException {
         Path    fileResorce = null;
         URL resource;

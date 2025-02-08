@@ -1,18 +1,15 @@
-package HTTPServer;
+package ru.ilya.http.server;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class SimpleServer {
 
     private static final int PORT = 8080;
     private static String filePath = null;
+
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -37,22 +34,22 @@ public class SimpleServer {
                         }
                         System.out.println(line);
                     }
-                    OutputStream outputStream = socket.getOutputStream();
+
                     Thread.ofVirtual().start(() -> {
                         try {
-                            new ClientResponce(socket, filePath).sendResponse();
+                            new ClientService(socket, filePath).sendResponse();
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            throw new IllegalStateException(e);
                         }
                     });
                 }
                 catch (Exception e){
-                    System.out.println(e.toString());
+                    System.out.println(e);
                 }
             }
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e);
         }
     }
 }
