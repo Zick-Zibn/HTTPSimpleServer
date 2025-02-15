@@ -1,6 +1,7 @@
 package ru.ilya.http.server.service;
 
-import ru.ilya.http.server.domain.*;
+import ru.ilya.http.server.domain.Request;
+import ru.ilya.http.server.domain.Response;
 
 import java.io.*;
 import java.net.Socket;
