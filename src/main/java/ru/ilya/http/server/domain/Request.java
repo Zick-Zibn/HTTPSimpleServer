@@ -1,20 +1,27 @@
 package ru.ilya.http.server.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
 
     private RequestType requestType;
 
-    private Map<String, String> headers;
+    private String filename;
+
+    private String httpVersion;
+
+    private Map<String, String> headers = new HashMap<>();
 
     private String body;
 
     public Request() {
     }
 
-    public Request(RequestType requestType, Map<String, String> headers, String body) {
+    public Request(RequestType requestType, String filename, String httpVersion, Map<String, String> headers, String body) {
         this.requestType = requestType;
+        this.filename = filename;
+        this.httpVersion = httpVersion;
         this.headers = headers;
         this.body = body;
     }
@@ -41,5 +48,21 @@ public class Request {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
+    public void setHttpVersion(String httpVersion) {
+        this.httpVersion = httpVersion;
     }
 }

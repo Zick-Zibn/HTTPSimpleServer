@@ -1,86 +1,52 @@
 package ru.ilya.http.server;
 
 import ru.ilya.http.server.domain.Request;
-import ru.ilya.http.server.domain.Response;
-import ru.ilya.http.server.service.ClientSocketService;
-import ru.ilya.http.server.service.Configuration;
-import ru.ilya.http.server.service.RequestParser;
-import ru.ilya.http.server.service.ResponseSerializer;
+import ru.ilya.http.server.service.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class SimpleServer {
 
-    private static final int PORT = 8080;
-    private static String filePath = null;
-    private ClientSocketService clientSocketService;
+    private final Configuration configuration;
 
-    public static void main(String[] args) throws IOException {
-        Configuration configuration = new Configuration(args);
-        if (configuration.checkParameters())
-            new SimpleServer().runServer();
+    private final FileService fileService;
+
+    public SimpleServer(String[] args) {
+        this.configuration = new Configuration(args);
+        this.fileService = new FileService(configuration.getRootFolder());
     }
-    public void runServer(){
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.printf("Server started at port %d%n", PORT);
+
+    public void runServer() {
+        try (ServerSocket serverSocket = new ServerSocket(configuration.getPort())) {
+            System.out.printf("Server started at port %d%n", configuration.getPort());
 
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
 
                     System.out.println("New connection accepted");
-                    clientSocketService = new ClientSocketService(socket, new RequestParser(), new ResponseSerializer());
-                    clientSocketService.runService();
-                    /*Thread.ofVirtual().start(() -> {
-                        clientSocketService = new ClientSocketService(socket, new RequestParser(), new ResponseSerializer());
-                        clientSocketService.runService();
-                    });*/
-                    /*BufferedReader input = new BufferedReader(
-                            new InputStreamReader(
-                                    socket.getInputStream(), StandardCharsets.UTF_8));
+                    ClientSocketService clientSocketService = new ClientSocketService(
+                            socket,
+                            new RequestParser(),
+                            new ResponseSerializer());
 
-                    input.read();
-                    while (!input.ready()) ;
-                    while (input.ready()) {
-                        String line = input.readLine();
-                        System.out.println(line);
+                    Request request = clientSocketService.readRequest();
+                    Path filePath = Paths.get(request.getFilename());
+                    if (fileService.isFileExists(filePath)) {
+                        InputStream inputStream = fileService.readFile(filePath);
+                        // TODO complete request handling
+                        // TODO Response response = new Response(200, )
                     }
-                    if (input.ready()) {
-
-                    while (input.ready()) {
-                        Stream<?> lines = input.lines();
-                        //lines.map(l -> l.s).collect(Collectors.toMap((k, v) ->))
-                        String line = input.readLine();
-                        String[] arrString = line.split(" ");
-
-                        if (arrString[0].equals("GET")) {
-                            filePath = arrString[1];
-                        }
-                        System.out.println(line);
-                    }
-
-                    Thread.ofVirtual().start(() -> {
-                        try {
-                            new ClientService(socket, filePath).sendResponse();
-                        } catch (Exception e) {
-                            throw new IllegalStateException(e);
-                        }
-                    });*/
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println(e);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

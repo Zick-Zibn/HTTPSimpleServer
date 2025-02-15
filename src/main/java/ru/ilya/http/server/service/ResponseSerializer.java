@@ -7,8 +7,9 @@ import java.util.Map;
 
 public class ResponseSerializer {
 
+    // TODO handle all fields from Response class
     public String serialize(Response response) {
-        StringBuilder   stringResponse = new StringBuilder("");
+        StringBuilder   stringResponse = new StringBuilder();
         // TODO implement HTTP response string creation based on response object from parameter
         Map<String, String> mapHeaders = response.getHeaders();
         for (Map.Entry<String, String> pair : mapHeaders.entrySet()) {

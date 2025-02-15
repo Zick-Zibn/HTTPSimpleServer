@@ -16,13 +16,10 @@ public class FileService {
     }
 
     public boolean isFileExists(Path filePath) {
-        // TODO implement check if file exists
         return Files.exists(rootPath.resolve(filePath));
-        //return false;
     }
 
     public InputStream readFile(Path fileName) throws IOException {
-        // TODO implement file read to stream
         return Files.newInputStream(Path.of(rootPath.resolve(fileName).toUri()));
     }
 }
