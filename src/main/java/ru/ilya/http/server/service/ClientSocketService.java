@@ -62,7 +62,7 @@ public class ClientSocketService {
         }
         header.put("HTTP/1.1", " " + String.valueOf(response.getResponseCode()));
         header.put("Content-Type:", " text/html; charset=utf-8");
-        //header.put("Connection:", " Keep-Alive");
+
         response.setHeaders(header);
 
         this.writeResponse(response);
