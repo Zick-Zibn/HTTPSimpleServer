@@ -60,7 +60,7 @@ public class ClientSocketService {
         } else {
             response.setResponseCode(404);
         }
-        header.put("HTTP/1.1", " " + String.valueOf(response.getResponseCode()));
+        header.put("HTTP/1.1", " " + String.valueOf(response.getResponseCode()) + " OK");
         header.put("Content-Type:", " text/html; charset=utf-8");
 
         response.setHeaders(header);

@@ -22,8 +22,6 @@ public class SimpleServer {
     private static final int PORT = 8080;
     private static String filePath = null;
     private ClientSocketService clientSocketService;
-    private Request request;
-    RequestParser requestParser;
 
     public static void main(String[] args) throws IOException {
         Configuration configuration = new Configuration(args);
@@ -39,10 +37,12 @@ public class SimpleServer {
                     Socket socket = serverSocket.accept();
 
                     System.out.println("New connection accepted");
-                    Thread.ofVirtual().start(() -> {
+                    clientSocketService = new ClientSocketService(socket, new RequestParser(), new ResponseSerializer());
+                    clientSocketService.runService();
+                    /*Thread.ofVirtual().start(() -> {
                         clientSocketService = new ClientSocketService(socket, new RequestParser(), new ResponseSerializer());
                         clientSocketService.runService();
-                    });
+                    });*/
                     /*BufferedReader input = new BufferedReader(
                             new InputStreamReader(
                                     socket.getInputStream(), StandardCharsets.UTF_8));
@@ -53,7 +53,6 @@ public class SimpleServer {
                         String line = input.readLine();
                         System.out.println(line);
                     }
-
                     if (input.ready()) {
 
                     while (input.ready()) {

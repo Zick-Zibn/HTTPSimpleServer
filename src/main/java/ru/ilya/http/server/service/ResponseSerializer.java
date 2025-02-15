@@ -12,9 +12,9 @@ public class ResponseSerializer {
         // TODO implement HTTP response string creation based on response object from parameter
         Map<String, String> mapHeaders = response.getHeaders();
         for (Map.Entry<String, String> pair : mapHeaders.entrySet()) {
-            stringResponse.append(pair.getKey() + pair.getValue() + "/r/n");
+            stringResponse.append(pair.getKey() + pair.getValue() + "\r\n");
         }
-        stringResponse.append("/r/n");
+        stringResponse.append("\r\n");
         stringResponse.append(response.getBody());
 
         return stringResponse.toString();

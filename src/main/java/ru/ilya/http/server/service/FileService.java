@@ -23,6 +23,6 @@ public class FileService {
 
     public InputStream readFile(Path fileName) throws IOException {
         // TODO implement file read to stream
-        return Files.newInputStream(Path.of(rootPath.resolveSibling(fileName).toUri()));
+        return Files.newInputStream(Path.of(rootPath.resolve(fileName).toUri()));
     }
 }
