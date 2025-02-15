@@ -12,7 +12,6 @@ public class Response {
 
     public Response() {
     }
-
     public Response(int responseCode, Map<String, String> headers, String body) {
         this.responseCode = responseCode;
         this.headers = headers;
