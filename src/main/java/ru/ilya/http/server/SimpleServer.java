@@ -38,7 +38,8 @@ public class SimpleServer {
                     Request request = clientSocketService.readRequest();
                     Path filePath = Paths.get(request.getFilename());
                     if (fileService.isFileExists(filePath)) {
-                        InputStream inputStream = fileService.readFile(filePath);
+                        try (InputStream inputStream = fileService.readFile(filePath)) {
+                        }
                         // TODO complete request handling
                         // TODO Response response = new Response(200, )
                     }
